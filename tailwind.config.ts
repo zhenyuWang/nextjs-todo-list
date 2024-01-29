@@ -1,3 +1,5 @@
+const { nextui } = require('@nextui-org/react')
+
 import type { Config } from 'tailwindcss'
 
 const config: Config = {
@@ -5,6 +7,7 @@ const config: Config = {
     './pages/**/*.{js,ts,jsx,tsx,mdx}',
     './components/**/*.{js,ts,jsx,tsx,mdx}',
     './app/**/*.{js,ts,jsx,tsx,mdx}',
+    './node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}',
   ],
   theme: {
     extend: {
@@ -13,8 +16,21 @@ const config: Config = {
         'gradient-conic':
           'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
       },
+      borderRadius: {
+        '1': '1px',
+        '2': '2px',
+      },
+      animation: {
+        'scale-up-down': 'scaleUpDown 2s infinite',
+      },
+      keyframes: {
+        scaleUpDown: {
+          '0%, 100%': { transform: 'scale(1)' },
+          '50%': { transform: 'scale(1.2)' },
+        },
+      },
     },
   },
-  plugins: [],
+  plugins: [nextui()],
 }
 export default config
