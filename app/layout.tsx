@@ -1,8 +1,6 @@
 import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
 import './globals.css'
-
-const inter = Inter({ subsets: ['latin'] })
+import { ClerkProvider } from '@clerk/nextjs'
 
 export const metadata: Metadata = {
   title: 'Create Next App',
@@ -15,19 +13,24 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang='en'>
-      <head>
-        <meta charSet='utf-8' />
-        {/* Absolute address way can only use svg format pictures, or use network address ico format pictures, good pit, check for a long time */}
-        <link rel='icon' type='image/svg+xml' href='/favicon.svg' />
-        <title>Next.js Todo List</title>
-        <meta name='viewport' content='width=device-width, initial-scale=1' />
-        <meta
-          name='description'
-          content='A todo list that base on Next.js, integrates eslint, code checking, commit-msg validation, and more.'
-        />
-      </head>
-      <body className={inter.className}>{children}</body>
-    </html>
+    <ClerkProvider>
+        <html lang='en'>
+          <head>
+            <meta charSet='utf-8' />
+            {/* Absolute address way can only use svg format pictures, or use network address ico format pictures, good pit, check for a long time */}
+            <link rel='icon' type='image/svg+xml' href='/favicon.svg' />
+            <title>Next.js Todo List</title>
+            <meta
+              name='viewport'
+              content='width=device-width, initial-scale=1'
+            />
+            <meta
+              name='description'
+              content='A todo list that base on Next.js, integrates eslint, code checking, commit-msg validation, and more.'
+            />
+          </head>
+          <body>{children}</body>
+        </html>
+    </ClerkProvider>
   )
 }

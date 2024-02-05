@@ -1,5 +1,14 @@
-import { redirect } from 'next/navigation'
+'use client'
+
+import { useUser } from '@clerk/nextjs'
+import { useRouter } from 'next/navigation'
+import { useEffect } from 'react'
 
 export default function Home() {
-  redirect('/tasks')
+  const router = useRouter()
+  const { isSignedIn } = useUser()
+
+  useEffect(() => {
+    isSignedIn ? router.replace('/tasks') : router.replace('/sign-in')
+  }, [isSignedIn])
 }

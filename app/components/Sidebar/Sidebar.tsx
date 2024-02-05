@@ -1,6 +1,6 @@
 'use client'
 
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { Image, Link } from '@nextui-org/react'
 import {
@@ -13,8 +13,30 @@ import {
   MdDelete,
 } from 'react-icons/md'
 import { PiSignOutBold } from 'react-icons/pi'
+import { useUser, useClerk } from '@clerk/nextjs'
 
 function Sidebar() {
+  const router = useRouter()
+  const { signOut } = useClerk()
+  const { user } = useUser()
+
+  // When you enter the page, the user is null
+  // The user is obtained when the component function is executed twice
+  // So need to use the setTimeout hack logic to ensure that redirect to sign-in if no user is not logged in
+  useEffect(() => {
+    // @ts-ignore
+    if (window.replaceSignInTimer) {
+      // @ts-ignore
+      clearTimeout(window.replaceSignInTimer)
+    }
+    // @ts-ignore
+    window.replaceSignInTimer = setTimeout(() => {
+      if (!user) {
+        router.replace('/sign-in')
+      }
+    }, 2000)
+  }, [user])
+
   const menu = [
     {
       id: 1,
@@ -68,6 +90,8 @@ function Sidebar() {
 
   const pathname = usePathname()
 
+  if (!user) return null
+
   return (
     <div
       className={`${
@@ -94,13 +118,13 @@ function Sidebar() {
             className='w-14 sm:w-20 h-14 sm:h-20'
             radius='full'
             isZoomed={true}
-            src='https://images.unsplash.com/photo-1634926878768-2a5b3c42f139?q=80&w=200&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
+            src={user?.imageUrl}
             alt='avatar'
           />
           <div className='ml-4 mt-4 sm:mt-0'>
-            <span>Running</span>
+            <span>{user?.firstName}</span>
             <br />
-            <span>Snail</span>
+            <span>{user?.lastName}</span>
           </div>
         </div>
         <div className='pt-10'>
@@ -123,7 +147,8 @@ function Sidebar() {
         </div>
       </div>
       <div
-        className={`p-4 flex items-center text-slate-200 hover:text-sky-500 cursor-pointer}`}
+        className={`p-4 flex items-center text-slate-200 hover:text-sky-500 cursor-pointer`}
+        onClick={() => signOut(() => router.replace('/sign-in'))}
       >
         <PiSignOutBold size={20} />
         <span className='pl-3'>Sign Out</span>
