@@ -13,29 +13,35 @@ import {
   MdDelete,
 } from 'react-icons/md'
 import { PiSignOutBold } from 'react-icons/pi'
-import { useUser, useClerk } from '@clerk/nextjs'
+import { getCurrentUser } from '@/app/lib/actions'
+import { triggerSignOut } from '@/app/lib/actions'
+
+type User = {
+  id: string
+  avatar: string
+  firstName: string
+  lastName: string
+  email: string
+}
 
 function Sidebar() {
   const router = useRouter()
-  const { signOut } = useClerk()
-  const { user } = useUser()
 
-  // When you enter the page, the user is null
-  // The user is obtained when the component function is executed twice
-  // So need to use the setTimeout hack logic to ensure that redirect to sign-in if no user is not logged in
+  const [user, setUser] = useState({
+    id: '',
+    avatar: '',
+    firstName: '',
+    lastName: '',
+    email: '',
+  } as User)
+
   useEffect(() => {
-    // @ts-ignore
-    if (window.replaceSignInTimer) {
-      // @ts-ignore
-      clearTimeout(window.replaceSignInTimer)
+    const getUser = async () => {
+      const userInfo = await getCurrentUser()
+      userInfo && setUser(userInfo.user as User)
     }
-    // @ts-ignore
-    window.replaceSignInTimer = setTimeout(() => {
-      if (!user) {
-        router.replace('/sign-in')
-      }
-    }, 2000)
-  }, [user])
+    getUser()
+  }, [])
 
   const menu = [
     {
@@ -90,8 +96,6 @@ function Sidebar() {
 
   const pathname = usePathname()
 
-  if (!user) return null
-
   return (
     <div
       className={`${
@@ -118,7 +122,7 @@ function Sidebar() {
             className='w-14 sm:w-20 h-14 sm:h-20'
             radius='full'
             isZoomed={true}
-            src={user?.imageUrl}
+            src={user?.avatar}
             alt='avatar'
           />
           <div className='ml-4 mt-4 sm:mt-0'>
@@ -148,7 +152,7 @@ function Sidebar() {
       </div>
       <div
         className={`p-4 flex items-center text-slate-200 hover:text-sky-500 cursor-pointer`}
-        onClick={() => signOut(() => router.replace('/sign-in'))}
+        onClick={() => triggerSignOut()}
       >
         <PiSignOutBold size={20} />
         <span className='pl-3'>Sign Out</span>
