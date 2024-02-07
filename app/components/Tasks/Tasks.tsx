@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import type { Task } from '@/app/tasks/page'
+import GitHubLink from '@/app/components/GitHubLink'
 import ThemeSwitch from '@/app/components/ThemeSwitch'
 import AddTaskButton from './AddTaskButton'
 import TaskItem from './TaskItem'
@@ -25,6 +26,7 @@ export default function Tasks({
           <span className='text-xl text-sky-500'> ({tasks.length})</span>
         </h2>
         <div className='flex items-center'>
+          <GitHubLink />
           <ThemeSwitch />
           <AddTaskButton setShowModal={setShowModal} />
         </div>

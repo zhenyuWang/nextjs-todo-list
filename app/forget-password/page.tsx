@@ -3,8 +3,8 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useForm } from 'react-hook-form'
-// import GitHubLink from '@/app/components/GitHubLink'
-// import ThemeSwitch from '@/app/components/ThemeSwitch'
+import GitHubLink from '@/app/components/GitHubLink'
+import ThemeSwitch from '@/app/components/ThemeSwitch'
 import FormInput from '@/app/components/Form/FormInput'
 import { signUpFormValidationRules } from '@/app/utils/form'
 import { AiFillEye, AiFillEyeInvisible } from 'react-icons/ai'
@@ -14,7 +14,6 @@ import { toast } from 'react-toastify'
 import { getEmailVerificationCode, updateUserPassword } from '@/app/lib/actions'
 import { validateEmail } from '../utils/tools'
 import emailjs from '@emailjs/browser'
-import ThemeSwitch from '../components/ThemeSwitch';
 
 const SignUpPage = () => {
   const router = useRouter()
@@ -103,7 +102,7 @@ const SignUpPage = () => {
   return (
     <div className='h-[100vh] flex items-center justify-center overflow-hidden'>
       <div className='fixed top-4 right-4'>
-        {/* <GitHubLink /> */}
+        <GitHubLink />
         <ThemeSwitch />
       </div>
       <div className='w-[300px] md:w-[35%] min-w-[300px'>

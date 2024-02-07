@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
-// import GitHubLink from '@/app/components/GitHubLink'
-// import ThemeSwitch from '@/app/components/ThemeSwitch'
+import GitHubLink from '@/app/components/GitHubLink'
+import ThemeSwitch from '@/app/components/ThemeSwitch'
 import FormInput from '@/app/components/Form/FormInput'
 import { signInFormValidationRules } from '@/app/utils/form'
 import { AiFillEye, AiFillEyeInvisible } from 'react-icons/ai'
@@ -13,7 +13,6 @@ import { toast } from 'react-toastify'
 import { authenticate } from '@/app/lib/actions'
 import { useRouter } from 'next/navigation'
 import { getCurrentUser } from '@/app/lib/actions'
-import ThemeSwitch from '../components/ThemeSwitch';
 
 const SignInPage = () => {
   const router = useRouter()
@@ -72,7 +71,7 @@ const SignInPage = () => {
   return (
     <div className='h-[100vh] flex items-center justify-center overflow-hidden'>
       <div className='fixed top-4 right-4'>
-        {/* <GitHubLink /> */}
+        <GitHubLink />
         <ThemeSwitch />
       </div>
       <div className='w-[300px] md:w-[35%] min-w-[300px'>
