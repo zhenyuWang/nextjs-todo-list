@@ -30,7 +30,6 @@ const login = async (credentials: any) => {
       })
       user.avatar = `/users/${user._id.toString()}-avatar.png`
     }
-    console.log('user in login ---------', user)
     return user
   } catch (err: any) {
     throw new Error(err.message)
@@ -43,9 +42,7 @@ export const { signIn, signOut, auth } = NextAuth({
     CredentialsProvider({
       async authorize(credentials) {
         try {
-          const user = await login(credentials)
-          console.log('user in authorize ---------', user)
-          return user
+          return await login(credentials)
         } catch (err: any) {
           loginErrorMsg = err.message
           return null
@@ -56,7 +53,6 @@ export const { signIn, signOut, auth } = NextAuth({
   // ADD ADDITIONAL INFORMATION TO SESSION
   callbacks: {
     async jwt({ token, user }: { token: any; user: any }) {
-      console.log('user in jwt ---------', user)
       if (user) {
         token.id = user._id
         token.avatar = user.avatar
@@ -64,20 +60,17 @@ export const { signIn, signOut, auth } = NextAuth({
         token.lastName = user.lastName
         token.email = user.email
       }
-      console.log('token in jwt ---------', token)
       return token
     },
     // @ts-ignore
     async session({ session, token }: { session: any; token: any }) {
-      console.log('token in session ---------', token)
       if (token) {
         session.user.id = token.id
         session.user.avatar = token.avatar
         session.user.firstName = token.firstName
         session.user.lastName = token.lastName
-        session.user.email = token.email + '123'
+        session.user.email = token.email
       }
-      console.log('session in session ---------', session)
       return session
     },
   },
