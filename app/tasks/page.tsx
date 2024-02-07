@@ -1,5 +1,5 @@
 import Tasks from '@/app/components/Tasks/Tasks'
-import { fetchTasks } from '@/app/lib/data'
+import { fetchTasks } from '@/app/lib/actions'
 
 export type Task = {
   _id: string
@@ -12,7 +12,7 @@ export type Task = {
 }
 
 export default async function TasksPage() {
-  const { tasks } = await fetchTasks()
+  const { total, tasks } = await fetchTasks()
   const _tasks = tasks.map((task) => {
     const _item = task._doc
     _item._id = _item._id.toString()
@@ -20,5 +20,5 @@ export default async function TasksPage() {
     return _item
   })
 
-  return <Tasks title='All Tasks' tasks={_tasks} />
+  return <Tasks title='All Tasks' total={total} tasks={_tasks} />
 }
