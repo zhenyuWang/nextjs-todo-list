@@ -205,10 +205,9 @@ export const fetchTasks = async ({
       // @ts-expect-error
       query.isImportant = isImportant
     }
-    const tasks = await Task.find(query)
+    return await Task.find(query)
       .limit(pageSize)
       .skip(pageSize * (pageNum - 1))
-    return tasks
   } catch (err) {
     console.log(err)
     throw new Error('Failed to fetch tasks!')
