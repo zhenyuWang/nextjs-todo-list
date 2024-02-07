@@ -10,8 +10,11 @@ import {
 } from '@nextui-org/react'
 import { useState } from 'react'
 import { MdEditNote, MdDeleteOutline } from 'react-icons/md'
+import EditTaskModal from '../Modals/EditTaskModal'
 
 export default function TaskItem({ task }: { task: Task }) {
+  const [taskInfo, setTaskInfo] = useState(task)
+  const [showEditModal, setShowEditModal] = useState(false)
   const [showDeleteModal, setShowDeleteModal] = useState(false)
   const [deletingTask, setDeletingTask] = useState(false)
 
@@ -47,6 +50,10 @@ export default function TaskItem({ task }: { task: Task }) {
     }
   }
 
+  const updateTaskInfo = (task: any) => {
+    setTaskInfo((prev) => ({ ...prev, ...task }))
+  }
+
   return (
     <div
       key={task._id}
@@ -54,31 +61,34 @@ export default function TaskItem({ task }: { task: Task }) {
     >
       <h3
         className={`text-xl ${
-          task.isImportant ? 'text-red-500 font-bold' : ''
+          taskInfo.isImportant ? 'text-red-500 font-bold' : ''
         }`}
       >
-        {task.title}
+        {taskInfo.title}
       </h3>
       <p className='min-h-[85px] pt-3 flex-1 line-clamp-3'>
-        {task.description}
+        {taskInfo.description}
       </p>
       <div className='pt-3 text-sm text-gray-300'>
-        <div>createdAt: {task.createdAt}</div>
-        {task.deadline ? (
-          <div className='pt-2'>deadline: {task.deadline}</div>
+        <div>createdAt: {taskInfo.createdAt}</div>
+        {taskInfo.deadline ? (
+          <div className='pt-2'>deadline: {taskInfo.deadline}</div>
         ) : null}
       </div>
       <div className='pt-3 flex justify-between'>
         <span
           className={`py-1 w-24 text-center rounded-xl text-sm ${getStatusColor(
-            task.status,
+            taskInfo.status,
           )}`}
         >
-          {getStatusText(task.status)}
+          {getStatusText(taskInfo.status)}
         </span>
         <div className='flex'>
           <MdEditNote
             size={24}
+            onClick={() => {
+              setShowEditModal(true)
+            }}
             className='mr-1 hover:scale-110 transition-all cursor-pointer'
           />
           <MdDeleteOutline
@@ -90,6 +100,12 @@ export default function TaskItem({ task }: { task: Task }) {
           />
         </div>
       </div>
+      <EditTaskModal
+        taskInfo={taskInfo}
+        showModal={showEditModal}
+        setShowModal={setShowEditModal}
+        updateTaskInfo={updateTaskInfo}
+      />
       <Modal
         isOpen={showDeleteModal}
         onOpenChange={() => setShowDeleteModal(false)}
