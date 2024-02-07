@@ -180,8 +180,13 @@ export const fetchTasks = async (q = '', pageNum = 1, pageSize = 10000) => {
   try {
     connectToDB()
     // @ts-expect-error
-    const total = await Task.find({ title: { $regex: regex } }).count()
-    const tasks = await Task.find({ title: { $regex: regex } })
+    const { user } = await auth()
+    const total = await Task.find({
+      title: { $regex: regex },
+      userId: user.id,
+      // @ts-expect-error
+    }).count()
+    const tasks = await Task.find({ title: { $regex: regex }, userId: user.id })
       .limit(pageSize)
       .skip(pageSize * (pageNum - 1))
     return { total, tasks }
@@ -207,14 +212,17 @@ export const createTask = async (taskInfo: any) => {
   try {
     connectToDB()
 
+    // @ts-expect-error
+    const { user } = await auth()
+
     const newTask = new Task({
+      userId: user.id,
       title,
       description,
       deadline,
       status,
       isImportant,
     })
-
     await newTask.save()
   } catch (err) {
     // TODO: optimize request failure interactions
@@ -257,11 +265,8 @@ export const updateTask = async (taskInfo: any) => {
     await Task.findByIdAndUpdate(id, updateFields)
   } catch (err) {
     console.log(err)
-    throw new Error('Failed to update task!')
+    return { errMsg: 'Failed to update task!' }
   }
-
-  revalidatePath('/dashboard/tasks')
-  redirect('/dashboard/tasks')
 }
 
 export const authenticate = async (formData: any) => {
