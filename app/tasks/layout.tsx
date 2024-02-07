@@ -5,7 +5,6 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
-
   return (
     <div className='h-[100vh] flex px-5 py-5 overflow-hidden'>
       <Sidebar />

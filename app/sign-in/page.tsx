@@ -13,9 +13,11 @@ import { toast } from 'react-toastify'
 import { authenticate } from '@/app/lib/actions'
 import { useRouter } from 'next/navigation'
 import { getCurrentUser } from '@/app/lib/actions'
+import { useTheme } from '@/app/context/theme-context'
 
 const SignInPage = () => {
   const router = useRouter()
+  const { theme } = useTheme()
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
@@ -50,7 +52,7 @@ const SignInPage = () => {
       toast.error(errMsg, {
         position: 'top-center',
         autoClose: 2000,
-        theme: 'dark',
+        theme,
       })
     } else {
       setLoginSuccess(true)

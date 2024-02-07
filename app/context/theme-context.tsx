@@ -2,9 +2,13 @@
 
 import React, { useEffect, useState, createContext, useContext } from 'react'
 
-const ThemeContext = createContext(null)
+const ThemeContext = createContext({ theme: 'light', toggleTheme: () => {} })
 
-export default function ThemeContextProvider({ children }) {
+export default function ThemeContextProvider({
+  children,
+}: {
+  children: React.ReactNode
+}) {
   const [theme, setTheme] = useState('light')
 
   const toggleTheme = () => {

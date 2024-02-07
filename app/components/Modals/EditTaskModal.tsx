@@ -17,6 +17,7 @@ import {
 import { toast } from 'react-toastify'
 import { updateTask } from '@/app/lib/actions'
 import { Task } from '@/app/tasks/page'
+import { useTheme } from '@/app/context/theme-context'
 
 export default function EditTaskModal({
   taskInfo,
@@ -29,6 +30,8 @@ export default function EditTaskModal({
   setShowModal: Dispatch<SetStateAction<boolean>>
   updateTaskInfo: (taskInfo: any) => void
 }) {
+  const { theme } = useTheme()
+
   const [title, setTitle] = useState(taskInfo.title)
   const [description, setDescription] = useState(taskInfo.description)
   const [deadline, setDeadline] = useState(taskInfo.deadline)
@@ -54,7 +57,7 @@ export default function EditTaskModal({
       return toast.error(`${title ? 'Description' : 'Title'} is required!`, {
         position: 'top-center',
         autoClose: 2000,
-        theme: 'dark',
+        theme,
       })
     }
     const res = await updateTask({
@@ -71,7 +74,7 @@ export default function EditTaskModal({
       return toast.error(res.errMsg, {
         position: 'top-center',
         autoClose: 2000,
-        theme: 'dark',
+        theme,
       })
     }
     updateTaskInfo({ title, description, deadline, status, isImportant })

@@ -14,9 +14,11 @@ import { toast } from 'react-toastify'
 import { getEmailVerificationCode, updateUserPassword } from '@/app/lib/actions'
 import { validateEmail } from '../utils/tools'
 import emailjs from '@emailjs/browser'
+import { useTheme } from '@/app/context/theme-context'
 
 const SignUpPage = () => {
   const router = useRouter()
+  const { theme } = useTheme()
 
   const [email, setEmail] = useState('')
   const [isEmailValid, setIsEmailValid] = useState(false)
@@ -37,7 +39,11 @@ const SignUpPage = () => {
   const sendEmailCode = async () => {
     const { errMsg, code } = await getEmailVerificationCode(email)
     if (errMsg) {
-      return toast.error(errMsg, {})
+      return toast.error(errMsg, {
+        position: 'top-center',
+        autoClose: 2000,
+        theme,
+      })
     }
 
     let count = 59
@@ -69,6 +75,7 @@ const SignUpPage = () => {
           toast.success('Verification code sent successfully.', {
             position: 'top-center',
             autoClose: 3000,
+            theme,
           })
         },
         (error: any) => {
@@ -76,6 +83,7 @@ const SignUpPage = () => {
           toast.error('Oh, something went wrong. Please try again.', {
             position: 'top-center',
             autoClose: 3000,
+            theme,
           })
         },
       )
@@ -88,7 +96,7 @@ const SignUpPage = () => {
       toast.error(res.errMsg, {
         position: 'top-center',
         autoClose: 2000,
-        theme: 'dark',
+        theme,
       })
     } else {
       setSignUpSuccess(true)

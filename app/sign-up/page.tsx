@@ -14,8 +14,10 @@ import { toast } from 'react-toastify'
 import { getEmailVerificationCode, createUser } from '@/app/lib/actions'
 import { validateEmail } from '../utils/tools'
 import emailjs from '@emailjs/browser'
+import { useTheme } from '@/app/context/theme-context'
 
 const SignUpPage = () => {
+  const { theme } = useTheme()
   const [avatar, setAvatar] = useState('')
   const [email, setEmail] = useState('')
   const [isEmailValid, setIsEmailValid] = useState(false)
@@ -41,7 +43,7 @@ const SignUpPage = () => {
           toast.warn('Image size should be less than 1MB', {
             position: 'top-center',
             autoClose: 2000,
-            theme: 'dark',
+            theme,
           })
         } else {
           setAvatar(reader.result as string)
@@ -56,7 +58,11 @@ const SignUpPage = () => {
   const sendEmailCode = async () => {
     const { errMsg, code } = await getEmailVerificationCode(email)
     if (errMsg) {
-      return toast.error(errMsg, {})
+      return toast.error(errMsg, {
+        position: 'top-center',
+        autoClose: 2000,
+        theme,
+      })
     }
 
     let count = 59
@@ -88,6 +94,7 @@ const SignUpPage = () => {
           toast.success('Verification code sent successfully.', {
             position: 'top-center',
             autoClose: 3000,
+            theme,
           })
         },
         (error: any) => {
@@ -95,6 +102,7 @@ const SignUpPage = () => {
           toast.error('Oh, something went wrong. Please try again.', {
             position: 'top-center',
             autoClose: 3000,
+            theme,
           })
         },
       )
@@ -107,7 +115,7 @@ const SignUpPage = () => {
       toast.error(res.errMsg, {
         position: 'top-center',
         autoClose: 2000,
-        theme: 'dark',
+        theme,
       })
     } else {
       setSignUpSuccess(true)

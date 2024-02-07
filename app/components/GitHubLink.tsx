@@ -5,8 +5,7 @@ import { Link } from '@nextui-org/react'
 import { FaGithub } from 'react-icons/fa'
 
 export default function ThemeSwitch() {
-  const themeContext = useTheme()
-  const theme = themeContext?.theme
+  const { theme } = useTheme()
 
   return (
     <Link

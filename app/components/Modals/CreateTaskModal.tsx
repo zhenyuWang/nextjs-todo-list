@@ -16,6 +16,7 @@ import {
 } from '@nextui-org/react'
 import { toast } from 'react-toastify'
 import { createTask } from '@/app/lib/actions'
+import { useTheme } from '@/app/context/theme-context'
 
 export default function CreateTaskModal({
   showModal,
@@ -24,6 +25,8 @@ export default function CreateTaskModal({
   showModal: boolean
   setShowModal: Dispatch<SetStateAction<boolean>>
 }) {
+  const { theme } = useTheme()
+
   const [submitting, setSubmitting] = useState(false)
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
@@ -48,7 +51,7 @@ export default function CreateTaskModal({
       return toast.error(`${title ? 'Description' : 'Title'} is required!`, {
         position: 'top-center',
         autoClose: 2000,
-        theme: 'dark',
+        theme,
       })
     }
     const res = await createTask({
@@ -63,7 +66,7 @@ export default function CreateTaskModal({
       return toast.error(res.errMsg, {
         position: 'top-center',
         autoClose: 2000,
-        theme: 'dark',
+        theme,
       })
     }
     setShowModal(false)
@@ -114,7 +117,7 @@ export default function CreateTaskModal({
               </ModalBody>
               <ModalFooter>
                 <Button onPress={onClose}>Cancel</Button>
-                <Button color='primary' onPress={submit}>
+                <Button color='primary' onPress={submit} isLoading={submitting}>
                   Submit
                 </Button>
               </ModalFooter>

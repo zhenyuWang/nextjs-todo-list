@@ -4,9 +4,7 @@ import { useTheme } from '@/app/context/theme-context'
 import { MdLightMode, MdDarkMode } from 'react-icons/md'
 
 export default function ThemeSwitch() {
-  const themeContext = useTheme()
-  const theme = themeContext?.theme
-  const toggleTheme = themeContext?.toggleTheme
+  const { theme, toggleTheme } = useTheme()
 
   return (
     <button

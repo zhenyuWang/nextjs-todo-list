@@ -9,7 +9,7 @@ import {
   MdDelete,
 } from 'react-icons/md'
 
-export default function Menus({ closeSidebar }: { closeSidebar: () => void }){
+export default function Menus({ closeSidebar }: { closeSidebar: () => void }) {
   const router = useRouter()
 
   const menu = [
