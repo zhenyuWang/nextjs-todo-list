@@ -1,10 +1,11 @@
-import fs from 'fs'
 import NextAuth from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
 import authConfig from './auth.config'
-import { connectToDB } from './app/lib/utils'
+import { base64ToLocalImg, connectToDB } from './app/lib/utils'
 import bcrypt from 'bcrypt'
 import { User } from './app/lib/models'
+import { updateUser } from './app/lib/actions'
+import { isBase64Img } from './app/utils/tools'
 
 let loginErrorMsg = ''
 export const getLoginErrorMsg = () => loginErrorMsg
@@ -22,6 +23,14 @@ const login = async (credentials: any) => {
 
     if (!isPasswordCorrect) throw new Error('Wrong password!')
 
+    if (isBase64Img(user.avatar)) {
+      await updateUser({
+        id: user._id,
+        avatar: user.avatar,
+      })
+      user.avatar = `/users/${user._id.toString()}-avatar.png`
+    }
+
     return user
   } catch (err: any) {
     throw new Error(err.message)
@@ -34,26 +43,7 @@ export const { signIn, signOut, auth } = NextAuth({
     CredentialsProvider({
       async authorize(credentials) {
         try {
-          const user = await login(credentials)
-          if (user?.avatar.startsWith('data:image')) {
-            const base64Data = user?.avatar.replace(
-              /^data:image\/\w+;base64,/,
-              '',
-            )
-            let dataBuffer = Buffer.from(base64Data, 'base64')
-
-            // Write buffer to file
-            try {
-              fs.writeFileSync(
-                `./public/users/${user.id}-avatar.png`,
-                dataBuffer,
-              )
-              user._doc.avatar = `/users/${user.id}-avatar.png`
-            } catch (err) {
-              console.log('write user avatar fail', err)
-            }
-          }
-          return user
+          return await login(credentials)
         } catch (err: any) {
           loginErrorMsg = err.message
           return null

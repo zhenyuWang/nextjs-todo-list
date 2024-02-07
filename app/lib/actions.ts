@@ -3,10 +3,11 @@
 import fs from 'fs'
 import { revalidatePath } from 'next/cache'
 import { User, Task } from './models'
-import { connectToDB } from './utils'
+import { base64ToLocalImg, connectToDB } from './utils'
 import { redirect } from 'next/navigation'
 import bcrypt from 'bcrypt'
 import { auth, signIn, signOut, getLoginErrorMsg } from '@/auth'
+import { isBase64Img } from '../utils/tools'
 
 const EMAIL_VERIFICATION_CODE_EXPIRY = 60 * 1000 // 1 minute
 const EMAIL_VERIFICATION_CODE_MAP = new Map()
@@ -15,7 +16,7 @@ const generateVerificationCode = () => {
   return Math.round(100000 + Math.random() * 900000)
 }
 
-export const getEmailVerificationCode = (email) => {
+export const getEmailVerificationCode = (email: string) => {
   if (EMAIL_VERIFICATION_CODE_MAP.has(email)) {
     const preCodeInfo = EMAIL_VERIFICATION_CODE_MAP.get(email)
     const now = Date.now()
@@ -36,7 +37,7 @@ export const getEmailVerificationCode = (email) => {
   return { code }
 }
 
-export const createUser = async (userInfo) => {
+export const createUser = async (userInfo: any) => {
   const { avatar, firstName, lastName, email, password, verificationCode } =
     userInfo
 
@@ -79,7 +80,7 @@ export const createUser = async (userInfo) => {
   redirect('/tasks')
 }
 
-export const deleteUser = async (id) => {
+export const deleteUser = async (id: string) => {
   try {
     connectToDB()
 
@@ -106,56 +107,75 @@ export const deleteUser = async (id) => {
   revalidatePath('/dashboard/users')
 }
 
-export const updateUser = async (userInfo) => {
-  const { id, img, firstName, lastName, email, password } = userInfo
+export const updateUser = async (userInfo: any) => {
+  const { id, avatar, firstName, lastName } = userInfo
 
-  let changedAvatarPath = `./public/users/${id}-avatar.png`
+  const changedAvatarPath = `./public/users/${id}-avatar.png`
   let isAvatarChanged = false
 
   try {
     connectToDB()
-    if (img?.startsWith('data:image')) {
-      const base64Data = img.replace(/^data:image\/\w+;base64,/, '')
-      let dataBuffer = Buffer.from(base64Data, 'base64')
-
-      // Write buffer to file
-      try {
-        fs.writeFileSync(changedAvatarPath, dataBuffer)
-
-        isAvatarChanged = true
-      } catch (err) {
-        console.log('write user avatar fail', err)
+    if (isBase64Img(avatar)) {
+      const { errMsg } = base64ToLocalImg(avatar, changedAvatarPath)
+      if (errMsg) {
+        throw new Error(errMsg)
       }
+      isAvatarChanged = true
     }
 
-    const salt = await bcrypt.genSalt(10)
-    const hashedPassword = password ? await bcrypt.hash(password, salt) : ''
+    const updateFields = {}
 
-    const updateFields = {
-      firstName,
-      lastName,
-      email,
-      password: hashedPassword,
+    if (avatar) {
+      // @ts-expect-error
+      updateFields.avatar = avatar
     }
-
+    if (firstName) {
+      // @ts-expect-error
+      updateFields.firstName = firstName
+    }
+    if (lastName) {
+      // @ts-expect-error
+      updateFields.lastName = lastName
+    }
     if (isAvatarChanged) {
-      updateFields.img = changedAvatarPath.replace('./public', '')
+      // @ts-expect-error
+      updateFields.avatar = changedAvatarPath.replace('./public', '')
     }
-    if (!password) {
-      delete updateFields.password
-    }
-
     await User.findByIdAndUpdate(id, updateFields)
   } catch (err) {
-    console.log(err)
+    console.log('updateUser error:', err)
     throw new Error('Failed to update user!')
   }
-
-  revalidatePath('/dashboard/users')
-  redirect('/dashboard/users')
 }
 
-export const createTask = async (taskInfo) => {
+export const fetchTasks = async (q = '', pageNum = 1, pageSize = 10000) => {
+  const regex = new RegExp(q, 'i')
+
+  try {
+    connectToDB()
+    // @ts-expect-error
+    const total = await Task.find({ title: { $regex: regex } }).count()
+    const tasks = await Task.find({ title: { $regex: regex } })
+      .limit(pageSize)
+      .skip(pageSize * (pageNum - 1))
+    return { total, tasks }
+  } catch (err) {
+    console.log(err)
+    throw new Error('Failed to fetch tasks!')
+  }
+}
+
+export const fetchTask = async (id: string) => {
+  try {
+    connectToDB()
+    return await Task.findById(id)
+  } catch (err) {
+    console.log(err)
+    throw new Error('Failed to fetch task!')
+  }
+}
+
+export const createTask = async (taskInfo: any) => {
   const { title, description, deadline, status, isImportant } = taskInfo
 
   try {
@@ -180,7 +200,7 @@ export const createTask = async (taskInfo) => {
   redirect('/tasks')
 }
 
-export const deleteTask = async (id) => {
+export const deleteTask = async (id: string) => {
   try {
     connectToDB()
 
@@ -194,8 +214,8 @@ export const deleteTask = async (id) => {
   revalidatePath('/tasks')
 }
 
-export const updateTask = async (taskInfo) => {
-  const { title, description, deadline, status, isImportant } = taskInfo
+export const updateTask = async (taskInfo: any) => {
+  const { id, title, description, deadline, status, isImportant } = taskInfo
 
   try {
     connectToDB()
@@ -218,7 +238,7 @@ export const updateTask = async (taskInfo) => {
   redirect('/dashboard/tasks')
 }
 
-export const authenticate = async (formData) => {
+export const authenticate = async (formData: any) => {
   const { email, password } = formData
   try {
     await signIn('credentials', { email, password })
