@@ -174,22 +174,41 @@ export const updateUserPassword = async (formData: any) => {
   }
 }
 
-export const fetchTasks = async (q = '', pageNum = 1, pageSize = 10000) => {
-  const regex = new RegExp(q, 'i')
+export const fetchTasks = async ({
+  keyword = '',
+  status = -1,
+  isImportant,
+  pageNum = 1,
+  pageSize = 10000,
+}: {
+  keyword?: string
+  status?: number
+  isImportant?: boolean
+  pageNum?: number
+  pageSize?: number
+}) => {
+  const regex = new RegExp(keyword, 'i')
 
   try {
     connectToDB()
     // @ts-expect-error
     const { user } = await auth()
-    const total = await Task.find({
+    const query = {
       title: { $regex: regex },
       userId: user.id,
+    }
+    if (status >= 0) {
       // @ts-expect-error
-    }).count()
-    const tasks = await Task.find({ title: { $regex: regex }, userId: user.id })
+      query.status = status
+    }
+    if (typeof isImportant === 'boolean') {
+      // @ts-expect-error
+      query.isImportant = isImportant
+    }
+    const tasks = await Task.find(query)
       .limit(pageSize)
       .skip(pageSize * (pageNum - 1))
-    return { total, tasks }
+    return tasks
   } catch (err) {
     console.log(err)
     throw new Error('Failed to fetch tasks!')

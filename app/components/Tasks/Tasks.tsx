@@ -9,11 +9,9 @@ import CreateTaskModal from '@/app/components/Modals/CreateTaskModal'
 
 export default function Tasks({
   title,
-  total,
   tasks,
 }: {
   title: string
-  total: number
   tasks: Task[]
 }) {
   const [showModal, setShowModal] = useState(false)
@@ -23,7 +21,7 @@ export default function Tasks({
       <div className='p-5 absolute top-0 left-0 right-0 flex items-center justify-between bg-slate-700'>
         <h2 className='pb-2 text-2xl border-b-3 border-sky-400'>
           {title}
-          <span className='text-xl text-sky-500'> ({total})</span>
+          <span className='text-xl text-sky-500'> ({tasks.length})</span>
         </h2>
         <AddTaskButton setShowModal={setShowModal} />
       </div>

@@ -13,7 +13,7 @@ export type Task = {
 }
 
 export default async function TasksPage() {
-  const { total, tasks } = await fetchTasks()
+  const tasks = await fetchTasks({})
   const _tasks = tasks.map((task) => {
     const _item = task._doc
     _item._id = _item._id.toString()
@@ -22,5 +22,5 @@ export default async function TasksPage() {
     return _item
   })
 
-  return <Tasks title='All Tasks' total={total} tasks={_tasks} />
+  return <Tasks title='All Tasks' tasks={_tasks} />
 }
