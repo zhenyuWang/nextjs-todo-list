@@ -24,6 +24,7 @@ export default function CreateTaskModal({
   showModal: boolean
   setShowModal: Dispatch<SetStateAction<boolean>>
 }) {
+  const [submitting, setSubmitting] = useState(false)
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
   const [deadline, setDeadline] = useState('')
@@ -42,6 +43,7 @@ export default function CreateTaskModal({
   }
 
   const submit = async () => {
+    setSubmitting(true)
     if (!title || !description) {
       return toast.error(`${title ? 'Description' : 'Title'} is required!`, {
         position: 'top-center',
@@ -56,6 +58,7 @@ export default function CreateTaskModal({
       status,
       isImportant,
     })
+    setSubmitting(false)
     if (res?.errMsg) {
       return toast.error(res.errMsg, {
         position: 'top-center',
