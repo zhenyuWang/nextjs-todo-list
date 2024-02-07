@@ -17,7 +17,7 @@ import emailjs from '@emailjs/browser'
 
 const SignUpPage = () => {
   const router = useRouter()
-  
+
   const [email, setEmail] = useState('')
   const [isEmailValid, setIsEmailValid] = useState(false)
   const [submitting, setSubmitting] = useState(false)
