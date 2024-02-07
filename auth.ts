@@ -64,6 +64,7 @@ export const { signIn, signOut, auth } = NextAuth({
         token.lastName = user.lastName
         token.email = user.email
       }
+      console.log('token in jwt ---------', token)
       return token
     },
     // @ts-ignore
@@ -76,6 +77,7 @@ export const { signIn, signOut, auth } = NextAuth({
         session.user.lastName = token.lastName
         session.user.email = token.email + '123'
       }
+      console.log('session in session ---------', session)
       return session
     },
   },
