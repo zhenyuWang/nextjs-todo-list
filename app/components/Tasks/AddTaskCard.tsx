@@ -8,7 +8,7 @@ export default function AddTaskButton({
 }) {
   return (
     <div
-      className='h-[240px] w-full lg:w-[275px] p-3 flex items-center justify-center bg-slate-600 border border-slate-800 rounded-md cursor-pointer'
+      className='h-[240px] w-full lg:w-[275px] p-3 flex items-center justify-center bg-slate-300 dark:bg-slate-600 border border-slate-400 dark:border-slate-800 rounded-md cursor-pointer'
       onClick={() => setShowModal(true)}
     >
       <AiOutlinePlus size={22} />

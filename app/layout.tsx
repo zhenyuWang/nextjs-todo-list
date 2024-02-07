@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import './globals.css'
+import ThemeContextProvider from '@/app/context/theme-context'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 
@@ -26,9 +27,11 @@ export default function RootLayout({
           content='A todo list that base on Next.js, integrates eslint, code checking, commit-msg validation, and more.'
         />
       </head>
-      <body>
-        <ToastContainer />
-        {children}
+      <body className='bg-gradient-to-r from-[#ecddfa] to-[#7ccdf5] dark:from-[#330066] dark:to-[#000]'>
+        <ThemeContextProvider>
+          {children}
+          <ToastContainer />
+        </ThemeContextProvider>
       </body>
     </html>
   )

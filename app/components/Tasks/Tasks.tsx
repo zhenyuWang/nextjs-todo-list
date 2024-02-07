@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import type { Task } from '@/app/tasks/page'
+import ThemeSwitch from '@/app/components/ThemeSwitch'
 import AddTaskButton from './AddTaskButton'
 import TaskItem from './TaskItem'
 import AddTaskCard from './AddTaskCard'
@@ -18,12 +19,15 @@ export default function Tasks({
 
   return (
     <div className='h-full py-5 relative'>
-      <div className='p-5 absolute top-0 left-0 right-0 flex items-center justify-between bg-slate-700'>
+      <div className='p-5 absolute top-0 left-0 right-0 flex items-center justify-between'>
         <h2 className='pb-2 text-2xl border-b-3 border-sky-400'>
           {title}
           <span className='text-xl text-sky-500'> ({tasks.length})</span>
         </h2>
-        <AddTaskButton setShowModal={setShowModal} />
+        <div className='flex items-center'>
+          <ThemeSwitch />
+          <AddTaskButton setShowModal={setShowModal} />
+        </div>
       </div>
       <div className='h-full pt-20 px-5 pb-5 flex flex-wrap content-start gap-5 overflow-y-auto'>
         {tasks.map((task) => (

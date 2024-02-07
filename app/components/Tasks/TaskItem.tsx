@@ -57,7 +57,7 @@ export default function TaskItem({ task }: { task: Task }) {
   return (
     <div
       key={task._id}
-      className='h-[240px] w-full lg:w-[275px] p-3 flex flex-col bg-slate-600 border border-slate-800 rounded-md'
+      className='h-[240px] w-full lg:w-[275px] p-3 flex flex-col bg-slate-300 dark:bg-slate-600 border border-slate-400 dark:border-slate-800 rounded-md'
     >
       <h3
         className={`text-xl ${

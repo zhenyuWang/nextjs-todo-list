@@ -55,9 +55,9 @@ export default function Menus({ closeSidebar }: { closeSidebar: () => void }){
             key={item.id}
             className={`flex p-4 ${
               pathname === item.link
-                ? 'bg-slate-900 sm:bg-slate-800 border-r-4 border-lime-300'
+                ? 'bg-slate-300 dark:bg-slate-900 sm:dark:bg-slate-800 border-r-4 border-lime-300'
                 : ''
-            } text-slate-200 hover:text-sky-500`}
+            } text-slate-500 dark:text-slate-200 hover:text-sky-500`}
             onClick={() => {
               closeSidebar()
               router.push(item.link)

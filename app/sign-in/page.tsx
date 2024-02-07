@@ -13,6 +13,7 @@ import { toast } from 'react-toastify'
 import { authenticate } from '@/app/lib/actions'
 import { useRouter } from 'next/navigation'
 import { getCurrentUser } from '@/app/lib/actions'
+import ThemeSwitch from '../components/ThemeSwitch';
 
 const SignInPage = () => {
   const router = useRouter()
@@ -69,10 +70,10 @@ const SignInPage = () => {
     )
 
   return (
-    <div className='h-[100vh] flex items-center justify-center overflow-hidden bg-gradient-to-r from-[#ecddfa] to-[#7ccdf5] dark:from-[#330066] dark:to-[#000]'>
+    <div className='h-[100vh] flex items-center justify-center overflow-hidden'>
       <div className='fixed top-4 right-4'>
-        {/* <GitHubLink />
-        <ThemeSwitch /> */}
+        {/* <GitHubLink /> */}
+        <ThemeSwitch />
       </div>
       <div className='w-[300px] md:w-[35%] min-w-[300px'>
         <h1 className='pb-8 text-center text-3xl font-bold'>Sign In</h1>

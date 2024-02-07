@@ -29,13 +29,11 @@ export default function Sidebar() {
   return (
     <div
       className={`${
-        collapsed
-          ? 'mr-0 translate-x-[-160px] sm:translate-x-[-26px]'
-          : 'mr-5 translate-x-0'
-      } w-[160px] sm:w-[240px] sm:h-full fixed sm:relative top-10 sm:top-0 left-0 z-50 flex flex-col py-2 justify-between bg-slate-800 sm:bg-slate-700 border border-slate-500 rounded-md transition-all`}
+        collapsed ? 'translate-x-[-160px] sm:translate-x-0' : 'translate-x-0'
+      } w-[160px] sm:w-[240px] sm:h-full mr-5 fixed sm:relative top-10 sm:top-0 left-0 z-50 flex flex-col py-2 justify-between bg-slate-400 sm:bg-slate-200 dark:bg-slate-800 sm:dark:bg-slate-700 border border-slate-300 dark:border-slate-500 rounded-md transition-all`}
     >
       <div
-        className={`flex sm:hidden w-9 h-10 absolute right-[-36px] top-6 z-10 items-center justify-center bg-slate-700 rounded-2 border border-slate-500 ${
+        className={`flex sm:hidden w-9 h-10 absolute right-[-36px] top-6 z-10 items-center justify-center bg-slate-400 sm:bg-slate-200 dark:bg-slate-700 rounded-2 border border-slate-300 sm:border-slate-500 dark:border-slate-500 ${
           collapsed ? '' : 'border-l-0'
         }`}
         onClick={collapseMenu}
