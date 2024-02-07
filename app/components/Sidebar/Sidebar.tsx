@@ -1,81 +1,13 @@
 'use client'
 
-import { usePathname, useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
-import { Image, Link } from '@nextui-org/react'
-import {
-  MdMenu,
-  MdClose,
-  MdHome,
-  MdNotificationImportant,
-  MdDone,
-  MdCleaningServices,
-  MdDelete,
-} from 'react-icons/md'
-import { PiSignOutBold } from 'react-icons/pi'
-import { getCurrentUser } from '@/app/lib/actions'
-import { triggerSignOut } from '@/app/lib/actions'
+import { MdMenu, MdClose } from 'react-icons/md'
 
-type User = {
-  id: string
-  avatar: string
-  firstName: string
-  lastName: string
-  email: string
-}
+import UserInfo from './UserInfo'
+import Menus from './Menus'
+import SignOut from './SignOut'
 
-function Sidebar() {
-  const router = useRouter()
-
-  const [user, setUser] = useState({
-    id: '',
-    avatar: '',
-    firstName: '',
-    lastName: '',
-    email: '',
-  } as User)
-
-  useEffect(() => {
-    const getUser = async () => {
-      const userInfo = await getCurrentUser()
-      userInfo && setUser(userInfo.user as User)
-    }
-    getUser()
-  }, [])
-
-  const menu = [
-    {
-      id: 1,
-      title: 'All Tasks',
-      icon: MdHome,
-      link: '/tasks',
-    },
-    {
-      id: 2,
-      title: 'Important',
-      icon: MdNotificationImportant,
-      link: '/tasks/important',
-    },
-    {
-      id: 3,
-      title: 'Doing',
-      icon: MdCleaningServices,
-      link: '/tasks/doing',
-    },
-    {
-      id: 4,
-      title: 'Completed',
-      icon: MdDone,
-      link: '/tasks/completed',
-    },
-    {
-      id: 5,
-      title: 'Deleted',
-      icon: MdDelete,
-      link: '/tasks/deleted',
-    },
-  ]
-
+export default function Sidebar() {
   const [collapsed, setCollapsed] = useState(false)
 
   const collapseMenu = () => {
@@ -93,8 +25,6 @@ function Sidebar() {
     window.addEventListener('resize', handleWindowResize)
     return () => window.removeEventListener('resize', handleWindowResize)
   }, [collapsed])
-
-  const pathname = usePathname()
 
   return (
     <div
@@ -117,48 +47,10 @@ function Sidebar() {
         )}
       </div>
       <div>
-        <div className='mt-5 sm:mt-6 flex flex-col sm:flex-row items-center justify-center'>
-          <Image
-            className='w-14 sm:w-20 h-14 sm:h-20'
-            radius='full'
-            isZoomed={true}
-            src={user?.avatar}
-            alt='avatar'
-          />
-          <div className='ml-4 mt-4 sm:mt-0'>
-            <span>{user?.firstName}</span>
-            <br />
-            <span>{user?.lastName}</span>
-          </div>
-        </div>
-        <div className='pt-10'>
-          {menu.map((item) => {
-            return (
-              <Link
-                key={item.id}
-                href={item.link}
-                className={`flex p-4 ${
-                  pathname === item.link
-                    ? 'bg-slate-900 sm:bg-slate-800 border-r-4 border-lime-300'
-                    : ''
-                } text-slate-200 hover:text-sky-500`}
-              >
-                <item.icon size={20} />
-                <span className='pl-3'>{item.title}</span>
-              </Link>
-            )
-          })}
-        </div>
+        <UserInfo />
+        <Menus />
       </div>
-      <div
-        className={`p-4 flex items-center text-slate-200 hover:text-sky-500 cursor-pointer`}
-        onClick={() => triggerSignOut()}
-      >
-        <PiSignOutBold size={20} />
-        <span className='pl-3'>Sign Out</span>
-      </div>
+      <SignOut />
     </div>
   )
 }
-
-export default Sidebar
