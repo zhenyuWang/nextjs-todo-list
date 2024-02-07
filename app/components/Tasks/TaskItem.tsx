@@ -57,7 +57,7 @@ export default function TaskItem({ task }: { task: Task }) {
   return (
     <div
       key={task._id}
-      className='h-[235px] w-full lg:w-[275px] p-3 flex flex-col bg-slate-600 border border-slate-800 rounded-md'
+      className='h-[240px] w-full lg:w-[275px] p-3 flex flex-col bg-slate-600 border border-slate-800 rounded-md'
     >
       <h3
         className={`text-xl ${
@@ -66,7 +66,7 @@ export default function TaskItem({ task }: { task: Task }) {
       >
         {taskInfo.title}
       </h3>
-      <p className='min-h-[85px] pt-3 flex-1 line-clamp-3'>
+      <p className='h-[85px] pt-3 flex-1 break-words line-clamp-3'>
         {taskInfo.description}
       </p>
       <div className='pt-3 text-sm text-gray-300'>
