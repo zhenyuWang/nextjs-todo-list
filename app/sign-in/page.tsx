@@ -15,10 +15,12 @@ import { useRouter } from 'next/navigation'
 import { getCurrentUser } from '@/app/lib/actions'
 import { useTheme } from '@/app/context/theme-context'
 
+export const dynamic = 'force-dynamic'
+
 const SignInPage = () => {
   const router = useRouter()
   const { theme } = useTheme()
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(false)
 
   useEffect(() => {
     const checkIsLogin = async () => {
