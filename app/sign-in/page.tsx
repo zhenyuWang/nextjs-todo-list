@@ -90,6 +90,7 @@ const SignInPage = () => {
             validationRule={signInFormValidationRules['email']}
             error={errors.email}
           />
+          <div className='mt-10'></div>
           <FormInput
             label='Password'
             placeholder='please input your password'
@@ -112,6 +113,7 @@ const SignInPage = () => {
             type={isVisiblePassword ? 'text' : 'password'}
             error={errors.password}
           />
+
           <div className='relative'>
             <Button
               className='w-full mt-6'

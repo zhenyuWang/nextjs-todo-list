@@ -159,6 +159,7 @@ const SignUpPage = () => {
             validationRule={signUpFormValidationRules['firstName']}
             error={errors.firstName}
           />
+          <div className='mt-10'></div>
           <FormInput
             label='Last Name'
             placeholder='please input your last name'
@@ -167,6 +168,7 @@ const SignUpPage = () => {
             validationRule={signUpFormValidationRules['lastName']}
             error={errors.lastName}
           />
+          <div className='mt-10'></div>
           <FormInput
             label='Email'
             placeholder='please input your email'
@@ -180,6 +182,7 @@ const SignUpPage = () => {
             validationRule={signUpFormValidationRules['email']}
             error={errors.email}
           />
+          <div className='mt-10'></div>
           <FormInput
             label='Password'
             placeholder='please input your password'
@@ -202,6 +205,7 @@ const SignUpPage = () => {
             type={isVisiblePassword ? 'text' : 'password'}
             error={errors.password}
           />
+          <div className='mt-10'></div>
           <FormInput
             label='Verification Code'
             placeholder='verification code'

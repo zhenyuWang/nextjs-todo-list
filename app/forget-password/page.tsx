@@ -129,6 +129,7 @@ const SignUpPage = () => {
             validationRule={signUpFormValidationRules['email']}
             error={errors.email}
           />
+          <div className='mt-10'></div>
           <FormInput
             label='New Password'
             placeholder='please input your password'
@@ -151,6 +152,7 @@ const SignUpPage = () => {
             type={isVisiblePassword ? 'text' : 'password'}
             error={errors.password}
           />
+          <div className='mt-10'></div>
           <FormInput
             label='Verification Code'
             placeholder='verification code'
