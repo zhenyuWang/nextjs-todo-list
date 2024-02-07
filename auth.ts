@@ -58,11 +58,11 @@ export const { signIn, signOut, auth } = NextAuth({
     async jwt({ token, user }: { token: any; user: any }) {
       console.log('user in jwt ---------', user)
       if (user) {
-        token.id = user.id
-        token.avatar = user._doc.avatar
-        token.firstName = user._doc.firstName
-        token.lastName = user._doc.lastName
-        token.email = user._doc.email
+        token.id = user._id
+        token.avatar = user.avatar
+        token.firstName = user.firstName
+        token.lastName = user.lastName
+        token.email = user.email
       }
       return token
     },
