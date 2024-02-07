@@ -30,7 +30,7 @@ const login = async (credentials: any) => {
       })
       user.avatar = `/users/${user._id.toString()}-avatar.png`
     }
-
+    console.log('user in login ---------', user)
     return user
   } catch (err: any) {
     throw new Error(err.message)
@@ -43,7 +43,9 @@ export const { signIn, signOut, auth } = NextAuth({
     CredentialsProvider({
       async authorize(credentials) {
         try {
-          return await login(credentials)
+          const user = await login(credentials)
+          console.log('user in authorize ---------', user)
+          return user
         } catch (err: any) {
           loginErrorMsg = err.message
           return null
@@ -54,6 +56,7 @@ export const { signIn, signOut, auth } = NextAuth({
   // ADD ADDITIONAL INFORMATION TO SESSION
   callbacks: {
     async jwt({ token, user }: { token: any; user: any }) {
+      console.log('user in jwt ---------', user)
       if (user) {
         token.id = user.id
         token.avatar = user._doc.avatar
@@ -65,6 +68,7 @@ export const { signIn, signOut, auth } = NextAuth({
     },
     // @ts-ignore
     async session({ session, token }: { session: any; token: any }) {
+      console.log('token in session ---------', token)
       if (token) {
         session.user.id = token.id
         session.user.avatar = token.avatar

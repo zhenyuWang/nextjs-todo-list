@@ -9,6 +9,11 @@ export default {
   },
   callbacks: {
     authorized({ auth, request }: { auth: any; request: any }) {
+      console.log('auth in auth.config.ts authorized ---------', auth)
+      console.log(
+        'nextUrl in auth.config.ts authorized ---------',
+        request.nextUrl,
+      )
       const isLoggedIn = !!auth?.user
 
       if (whiteList.has(request.nextUrl.pathname)) {
