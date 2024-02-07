@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { useForm } from 'react-hook-form'
 // import GitHubLink from '@/app/components/GitHubLink'
 // import ThemeSwitch from '@/app/components/ThemeSwitch'
@@ -8,15 +9,15 @@ import FormInput from '@/app/components/Form/FormInput'
 import { signUpFormValidationRules } from '@/app/utils/form'
 import { AiFillEye, AiFillEyeInvisible } from 'react-icons/ai'
 import Confetti from 'react-dom-confetti'
-import { Image, Button, Link } from '@nextui-org/react'
-import { MdCloudUpload } from 'react-icons/md'
+import { Button, Link } from '@nextui-org/react'
 import { toast } from 'react-toastify'
-import { getEmailVerificationCode, createUser } from '@/app/lib/actions'
+import { getEmailVerificationCode, updateUserPassword } from '@/app/lib/actions'
 import { validateEmail } from '../utils/tools'
 import emailjs from '@emailjs/browser'
 
 const SignUpPage = () => {
-  const [avatar, setAvatar] = useState('')
+  const router = useRouter()
+  
   const [email, setEmail] = useState('')
   const [isEmailValid, setIsEmailValid] = useState(false)
   const [submitting, setSubmitting] = useState(false)
@@ -32,26 +33,6 @@ const SignUpPage = () => {
     handleSubmit,
     formState: { errors },
   } = useForm()
-
-  const handleAvatarChange = async (e: any) => {
-    if (e.target.files?.length) {
-      const reader = new FileReader()
-      reader.addEventListener('load', async () => {
-        if ((reader.result as string).length > 1024 * 1024 * 1) {
-          toast.warn('Image size should be less than 1MB', {
-            position: 'top-center',
-            autoClose: 2000,
-            theme: 'dark',
-          })
-        } else {
-          setAvatar(reader.result as string)
-        }
-        // Prevent if the resource is selected twice, onChange is not triggered
-        e.target.value = ''
-      })
-      reader.readAsDataURL(e.target.files[0])
-    }
-  }
 
   const sendEmailCode = async () => {
     const { errMsg, code } = await getEmailVerificationCode(email)
@@ -100,9 +81,9 @@ const SignUpPage = () => {
       )
   }
 
-  const handleSignUp = async (data: any) => {
+  const submit = async (data: any) => {
     setSubmitting(true)
-    const res = await createUser({ avatar, ...data })
+    const res = await updateUserPassword(data)
     if (res?.errMsg) {
       toast.error(res.errMsg, {
         position: 'top-center',
@@ -111,6 +92,9 @@ const SignUpPage = () => {
       })
     } else {
       setSignUpSuccess(true)
+      setTimeout(() => {
+        router.replace('/sign-in')
+      }, 1000)
     }
     setSubmitting(false)
   }
@@ -122,43 +106,8 @@ const SignUpPage = () => {
         <ThemeSwitch /> */}
       </div>
       <div className='w-[35%] min-w-[300px'>
-        <h1 className='pb-8 text-center text-3xl font-bold'>Sign Up</h1>
-        <div className='w-[100px] h-[100px] mx-auto mb-10 relative '>
-          <Image
-            src={avatar || '/no-avatar.png'}
-            radius='full'
-            className='w-[100px] h-[100px]'
-            alt='avatar'
-          />
-          <MdCloudUpload
-            className='absolute bottom-0 right-0 z-10 text-slate-400'
-            size={26}
-          />
-          <input
-            accept='image/*'
-            id='avatar-upload'
-            type='file'
-            className='w-[100px] h-[100px] absolute top-0 left-0  opacity-0 z-20 cursor-pointer'
-            onChange={handleAvatarChange}
-          />
-        </div>
-        <form onSubmit={handleSubmit(handleSignUp)}>
-          <FormInput
-            label='First Name'
-            placeholder='please input your first name'
-            register={register}
-            name='firstName'
-            validationRule={signUpFormValidationRules['firstName']}
-            error={errors.firstName}
-          />
-          <FormInput
-            label='Last Name'
-            placeholder='please input your last name'
-            register={register}
-            name='lastName'
-            validationRule={signUpFormValidationRules['lastName']}
-            error={errors.lastName}
-          />
+        <h1 className='pb-8 text-center text-3xl font-bold'>Forget Password</h1>
+        <form onSubmit={handleSubmit(submit)}>
           <FormInput
             label='Email'
             placeholder='please input your email'
@@ -173,7 +122,7 @@ const SignUpPage = () => {
             error={errors.email}
           />
           <FormInput
-            label='Password'
+            label='New Password'
             placeholder='please input your password'
             description='8~20 non-space characters'
             register={register}

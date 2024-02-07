@@ -148,6 +148,32 @@ export const updateUser = async (userInfo: any) => {
   }
 }
 
+export const updateUserPassword = async (formData: any) => {
+  const { email, password, verificationCode } = formData
+  if (!EMAIL_VERIFICATION_CODE_MAP.has(email)) {
+    return { errMsg: 'Please request a verification code first.' }
+  }
+
+  const codeInfo = EMAIL_VERIFICATION_CODE_MAP.get(email)
+  if (codeInfo.code != verificationCode) {
+    return { errMsg: 'Invalid verification code.' }
+  }
+
+  try {
+    connectToDB()
+    const user = await User.findOne({ email })
+    if (!user) {
+      return { errMsg: 'The user does not exist.' }
+    }
+    const salt = await bcrypt.genSalt(10)
+    const hashedPassword = await bcrypt.hash(password, salt)
+    await User.findByIdAndUpdate(user._id, { password: hashedPassword })
+  } catch (err) {
+    console.log('updateUser error:', err)
+    return { errMsg: 'Failed to change password!' }
+  }
+}
+
 export const fetchTasks = async (q = '', pageNum = 1, pageSize = 10000) => {
   const regex = new RegExp(q, 'i')
 
