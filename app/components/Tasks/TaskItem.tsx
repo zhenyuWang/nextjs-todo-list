@@ -1,7 +1,27 @@
+import { deleteTask } from '@/app/lib/actions'
 import type { Task } from '@/app/tasks/page'
+import {
+  Button,
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+} from '@nextui-org/react'
+import { useState } from 'react'
 import { MdEditNote, MdDeleteOutline } from 'react-icons/md'
 
 export default function TaskItem({ task }: { task: Task }) {
+  const [showDeleteModal, setShowDeleteModal] = useState(false)
+  const [deletingTask, setDeletingTask] = useState(false)
+
+  const handleDelete = async () => {
+    setDeletingTask(true)
+    await deleteTask(task._id)
+    setDeletingTask(false)
+    setShowDeleteModal(false)
+  }
+
   const getStatusText = (status: number) => {
     switch (status) {
       case 0:
@@ -29,7 +49,7 @@ export default function TaskItem({ task }: { task: Task }) {
 
   return (
     <div
-      key={task.id}
+      key={task._id}
       className='h-[235px] w-full lg:w-[275px] p-3 flex flex-col bg-slate-600 border border-slate-800 rounded-md'
     >
       <h3
@@ -59,14 +79,42 @@ export default function TaskItem({ task }: { task: Task }) {
         <div className='flex'>
           <MdEditNote
             size={24}
-            className='mr-1 hover:scale-110 transition-all'
+            className='mr-1 hover:scale-110 transition-all cursor-pointer'
           />
           <MdDeleteOutline
             size={24}
-            className='hover:scale-110 transition-all'
+            onClick={() => {
+              setShowDeleteModal(true)
+            }}
+            className='hover:scale-110 transition-all cursor-pointer'
           />
         </div>
       </div>
+      <Modal
+        isOpen={showDeleteModal}
+        onOpenChange={() => setShowDeleteModal(false)}
+      >
+        <ModalContent>
+          {(onClose) => (
+            <>
+              <ModalHeader className='flex flex-col gap-1'>
+                Delete Task
+              </ModalHeader>
+              <ModalBody>Whether to delete the task?</ModalBody>
+              <ModalFooter>
+                <Button onPress={onClose}>Cancel</Button>
+                <Button
+                  color='primary'
+                  onPress={handleDelete}
+                  isLoading={deletingTask}
+                >
+                  Confirm
+                </Button>
+              </ModalFooter>
+            </>
+          )}
+        </ModalContent>
+      </Modal>
     </div>
   )
 }
