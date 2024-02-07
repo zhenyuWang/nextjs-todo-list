@@ -74,7 +74,7 @@ const SignInPage = () => {
         {/* <GitHubLink />
         <ThemeSwitch /> */}
       </div>
-      <div className='w-[35%] min-w-[300px'>
+      <div className='w-[300px] md:w-[35%] min-w-[300px'>
         <h1 className='pb-8 text-center text-3xl font-bold'>Sign In</h1>
         <form onSubmit={handleSubmit(handleLogin)}>
           <FormInput

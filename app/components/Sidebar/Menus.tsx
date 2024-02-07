@@ -9,7 +9,7 @@ import {
   MdDelete,
 } from 'react-icons/md'
 
-export default function Menus() {
+export default function Menus({ closeSidebar }: { closeSidebar: () => void }){
   const router = useRouter()
 
   const menu = [
@@ -58,7 +58,10 @@ export default function Menus() {
                 ? 'bg-slate-900 sm:bg-slate-800 border-r-4 border-lime-300'
                 : ''
             } text-slate-200 hover:text-sky-500`}
-            onClick={() => router.push(item.link)}
+            onClick={() => {
+              closeSidebar()
+              router.push(item.link)
+            }}
           >
             <item.icon size={20} />
             <span className='pl-3'>{item.title}</span>

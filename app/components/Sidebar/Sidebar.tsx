@@ -8,7 +8,7 @@ import Menus from './Menus'
 import SignOut from './SignOut'
 
 export default function Sidebar() {
-  const [collapsed, setCollapsed] = useState(false)
+  const [collapsed, setCollapsed] = useState(true)
 
   const collapseMenu = () => {
     setCollapsed(!collapsed)
@@ -48,7 +48,7 @@ export default function Sidebar() {
       </div>
       <div>
         <UserInfo />
-        <Menus />
+        <Menus closeSidebar={() => setCollapsed(true)} />
       </div>
       <SignOut />
     </div>
