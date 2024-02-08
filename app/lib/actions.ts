@@ -116,6 +116,10 @@ export const updateUser = async (userInfo: any) => {
   try {
     connectToDB()
     if (isBase64Img(avatar)) {
+      const dir = `./public/users`
+      if (!fs.existsSync(dir)) {
+        fs.mkdirSync(dir, { recursive: true })
+      }
       const { errMsg } = base64ToLocalImg(avatar, changedAvatarPath)
       if (errMsg) {
         throw new Error(errMsg)
