@@ -14,8 +14,12 @@ export type Task = {
   status: number
 }
 
-export default async function TasksPage() {
-  const { tasks } = await fetchTasks({})
+export default async function TasksPage({
+  searchParams,
+}: {
+  searchParams: Record<string, any>
+}) {
+  const { tasks } = await fetchTasks(searchParams)
   const _tasks = tasks
     ? tasks.map((task) => {
         const _item = task._doc

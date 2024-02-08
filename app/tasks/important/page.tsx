@@ -3,8 +3,12 @@ import { fetchTasks } from '@/app/lib/actions'
 
 export const dynamic = 'force-dynamic'
 
-export default async function ImportantTaskPage() {
-  const { tasks } = await fetchTasks({ isImportant: true })
+export default async function ImportantTaskPage({
+  searchParams,
+}: {
+  searchParams: Record<string, any>
+}) {
+  const { tasks } = await fetchTasks({ ...searchParams, isImportant: true })
   const _tasks = tasks
     ? tasks.map((task) => {
         const _item = task._doc

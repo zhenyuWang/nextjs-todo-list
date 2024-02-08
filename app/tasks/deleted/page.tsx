@@ -3,8 +3,12 @@ import { fetchTasks } from '@/app/lib/actions'
 
 export const dynamic = 'force-dynamic'
 
-export default async function DeletedTaskPage() {
-  const { tasks } = await fetchTasks({ status: 3 })
+export default async function DeletedTaskPage({
+  searchParams,
+}: {
+  searchParams: Record<string, any>
+}) {
+  const { tasks } = await fetchTasks({ ...searchParams, status: 3 })
   const _tasks = tasks
     ? tasks.map((task) => {
         const _item = task._doc

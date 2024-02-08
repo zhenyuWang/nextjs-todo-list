@@ -201,7 +201,10 @@ export const fetchTasks = async ({
     // @ts-expect-error
     const { user } = await auth()
     const query = {
-      title: { $regex: regex },
+      $or: [
+        { title: new RegExp(keyword, 'i') },
+        { description: new RegExp(keyword, 'i') },
+      ],
       userId: user.id,
     }
     if (status >= 0) {
@@ -212,6 +215,7 @@ export const fetchTasks = async ({
       // @ts-expect-error
       query.isImportant = isImportant
     }
+
     const tasks = await Task.find(query)
       .limit(pageSize)
       .skip(pageSize * (pageNum - 1))
