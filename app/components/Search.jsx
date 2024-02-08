@@ -25,7 +25,7 @@ const Search = ({ placeholder = 'Type to search...' }) => {
 
   return (
     <Input
-      className='w-50'
+      className='w-50 mr-2'
       size='small'
       placeholder={placeholder}
       startContent={<MdSearch size={20} />}
