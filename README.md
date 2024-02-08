@@ -24,4 +24,5 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 ## TODO:
 
-- [x] support search tasks
+- [x] optimize code, such as send email、action catch、type
+- [x] optimize UI
