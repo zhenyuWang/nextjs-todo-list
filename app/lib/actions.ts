@@ -1,5 +1,6 @@
 'use server'
 
+import path from 'path'
 import fs from 'fs'
 import { revalidatePath } from 'next/cache'
 import { User, Task } from './models'
@@ -85,7 +86,12 @@ export const deleteUser = async (id: string) => {
     connectToDB()
 
     await User.findByIdAndDelete(id)
-    const avatarPath = `./public/users/${id}-avatar.png`
+    const avatarPath = path.join(
+      process.cwd(),
+      'public',
+      'users',
+      `${id}-avatar.png`,
+    )
 
     fs.access(avatarPath, fs.constants.F_OK, (err) => {
       if (!err) {
@@ -110,13 +116,19 @@ export const deleteUser = async (id: string) => {
 export const updateUser = async (userInfo: any) => {
   const { id, avatar, firstName, lastName } = userInfo
 
-  const changedAvatarPath = `./public/users/${id}-avatar.png`
+  const changedAvatarPath = path.join(
+    process.cwd(),
+    'public',
+    'users',
+    `${id}-avatar.png`,
+  )
+  console.log('changedAvatarPath:', changedAvatarPath)
   let isAvatarChanged = false
 
   try {
     connectToDB()
     if (isBase64Img(avatar)) {
-      const dir = `./public/users`
+      const dir = path.join(process.cwd(), 'public', 'users')
       if (!fs.existsSync(dir)) {
         fs.mkdirSync(dir, { recursive: true })
       }
