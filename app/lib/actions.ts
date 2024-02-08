@@ -141,10 +141,17 @@ export const updateUser = async (userInfo: any) => {
       // @ts-expect-error
       updateFields.avatar = changedAvatarPath.replace('./public', '')
     }
-    await User.findByIdAndUpdate(id, updateFields)
+    const user = await User.findByIdAndUpdate(id, updateFields)
+    return {
+      user: {
+        avatar: user.avatar,
+        firstName: user.firstName,
+        lastName: user.lastName,
+      },
+    }
   } catch (err) {
     console.log('updateUser error:', err)
-    throw new Error('Failed to update user!')
+    return { errMsg: 'Failed to update user!' }
   }
 }
 
@@ -250,7 +257,6 @@ export const createTask = async (taskInfo: any) => {
   }
 
   revalidatePath('/tasks')
-  redirect('/tasks')
 }
 
 export const deleteTask = async (id: string) => {
