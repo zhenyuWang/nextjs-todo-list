@@ -128,6 +128,8 @@ export const updateUser = async (userInfo: any) => {
   try {
     connectToDB()
     if (isBase64Img(avatar)) {
+      // Dynamic file creation is not supported on vercel, so the logic is not valid after deployment
+      // If you want to update your avatar, you need to upload it to the GitHub repository based on the user.id
       const dir = path.join(process.cwd(), 'public', 'users')
       if (!fs.existsSync(dir)) {
         fs.mkdirSync(dir, { recursive: true })
