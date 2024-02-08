@@ -21,7 +21,7 @@ export default function Tasks({
 
   return (
     <div className='h-full py-5 relative'>
-      <div className='p-5 absolute top-0 left-0 right-0 sm:flex sm:items-center sm:justify-between bg-slate-200 dark:bg-slate-700 border border-slate-300 dark:border-slate-500'>
+      <div className='p-5 absolute top-0 left-0 right-0 sm:flex sm:items-center sm:justify-between bg-slate-100 dark:bg-slate-700 shadow-header dark:shadow-headerDark'>
         <h2 className='mr-4 pb-2 text-2xl border-b-3 border-sky-400'>
           {title}
           <span className='text-xl text-sky-500'> ({tasks.length})</span>

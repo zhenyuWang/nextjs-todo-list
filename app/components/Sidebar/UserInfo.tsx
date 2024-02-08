@@ -59,7 +59,10 @@ export default function UserInfo() {
         src={user.avatar || 'no-avatar.png'}
         alt='avatar'
       />
-      <FaUserEdit size={24} className='absolute top-12 left-30 z-10' />
+      <FaUserEdit
+        size={24}
+        className='absolute top-10 sm:top-12 left-30 z-10'
+      />
       <div className='ml-4 mt-4 sm:mt-0'>
         <span>{user?.firstName}</span>
         <br />

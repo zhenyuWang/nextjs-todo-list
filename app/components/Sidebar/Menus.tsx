@@ -57,7 +57,7 @@ export default function Menus({ closeSidebar }: { closeSidebar: () => void }) {
               pathname === item.link
                 ? 'bg-slate-300 dark:bg-slate-900 sm:dark:bg-slate-800 border-r-4 border-lime-300'
                 : ''
-            } text-slate-500 dark:text-slate-200 hover:text-sky-500`}
+            } text-slate-500 dark:text-slate-200 hover:text-sky-500 cursor-pointer`}
             onClick={() => {
               closeSidebar()
               router.push(item.link)

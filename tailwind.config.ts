@@ -30,6 +30,10 @@ const config: Config = {
           '50%': { transform: 'scale(1.2)' },
         },
       },
+      boxShadow: {
+        header: '5px 5px 5px rgba(0, 0, 0, .1)',
+        headerDark: '5px 5px 5px rgba(0, 0, 0, .3)',
+      },
     },
   },
   plugins: [nextui()],
