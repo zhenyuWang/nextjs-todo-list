@@ -3,22 +3,11 @@ import { fetchTasks } from '@/app/lib/actions'
 
 export const dynamic = 'force-dynamic'
 
-export type Task = {
-  _id: string
-  userId: string
-  title: string
-  description: string
-  createdAt: string
-  deadline?: string
-  isImportant?: boolean
-  status: number
-}
-
-export default async function TasksPage({
+const TasksPage = async ({
   searchParams,
 }: {
   searchParams: Record<string, any>
-}) {
+}) => {
   const { tasks } = await fetchTasks(searchParams)
   const _tasks = tasks
     ? tasks.map((task) => {
@@ -32,3 +21,5 @@ export default async function TasksPage({
 
   return <Tasks title='All Tasks' tasks={_tasks} />
 }
+
+export default TasksPage

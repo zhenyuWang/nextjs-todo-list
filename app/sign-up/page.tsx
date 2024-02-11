@@ -11,10 +11,14 @@ import Confetti from 'react-dom-confetti'
 import { Image, Button, Link } from '@nextui-org/react'
 import { MdCloudUpload } from 'react-icons/md'
 import { toast } from 'react-toastify'
-import { getEmailVerificationCode, createUser } from '@/app/lib/actions'
+import { createUser } from '@/app/lib/actions'
 import { validateEmail } from '../utils/tools'
-import emailjs from '@emailjs/browser'
 import { useTheme } from '@/app/context/theme-context'
+import {
+  getEmailVerificationCode,
+  setSendCodeButtonTextTimer,
+  sendVerificationCodeByEmail,
+} from '../utils/email'
 
 const SignUpPage = () => {
   const { theme } = useTheme()
@@ -56,56 +60,12 @@ const SignUpPage = () => {
   }
 
   const sendEmailCode = async () => {
-    const { errMsg, code } = await getEmailVerificationCode(email)
-    if (errMsg) {
-      return toast.error(errMsg, {
-        position: 'top-center',
-        autoClose: 2000,
-        theme,
-      })
-    }
+    const code = await getEmailVerificationCode(email, theme)
+    if (!code) return
 
-    let count = 59
-    setSendCodeButtonText(`${60}s`)
-    const timer = setInterval(() => {
-      if (count > 0) {
-        count--
-        setSendCodeButtonText(`${count}s`)
-      } else {
-        clearInterval(timer)
-        setSendCodeButtonText('Send code')
-      }
-    }, 1000)
+    setSendCodeButtonTextTimer(60, setSendCodeButtonText)
 
-    emailjs
-      .send(
-        process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID!,
-        process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID!,
-        {
-          to: email,
-          from: process.env.NEXT_PUBLIC_EMAILJS_FROM_EMAIL,
-          fromName: process.env.NEXT_PUBLIC_MY_NAME,
-          code,
-        },
-        process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY,
-      )
-      .then(
-        () => {
-          toast.success('Verification code sent successfully.', {
-            position: 'top-center',
-            autoClose: 3000,
-            theme,
-          })
-        },
-        (error: any) => {
-          console.log('sendEmailCode error:', error)
-          toast.error('Oh, something went wrong. Please try again.', {
-            position: 'top-center',
-            autoClose: 3000,
-            theme,
-          })
-        },
-      )
+    await sendVerificationCodeByEmail(email, code, theme)
   }
 
   const handleSignUp = async (data: any) => {

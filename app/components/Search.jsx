@@ -1,8 +1,8 @@
 'use client'
 
-import { MdSearch } from 'react-icons/md'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { useDebouncedCallback } from 'use-debounce'
+import { MdSearch } from 'react-icons/md'
 import { Input } from '@nextui-org/react'
 
 const Search = ({ placeholder = 'Type to search...' }) => {

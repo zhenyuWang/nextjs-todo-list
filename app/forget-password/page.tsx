@@ -2,21 +2,25 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { useTheme } from '@/app/context/theme-context'
 import { useForm } from 'react-hook-form'
 import GitHubLink from '@/app/components/GitHubLink'
 import ThemeSwitch from '@/app/components/ThemeSwitch'
 import FormInput from '@/app/components/Form/FormInput'
 import { signUpFormValidationRules } from '@/app/utils/form'
 import { AiFillEye, AiFillEyeInvisible } from 'react-icons/ai'
-import Confetti from 'react-dom-confetti'
 import { Button, Link } from '@nextui-org/react'
 import { toast } from 'react-toastify'
-import { getEmailVerificationCode, updateUserPassword } from '@/app/lib/actions'
 import { validateEmail } from '../utils/tools'
-import emailjs from '@emailjs/browser'
-import { useTheme } from '@/app/context/theme-context'
+import {
+  getEmailVerificationCode,
+  setSendCodeButtonTextTimer,
+  sendVerificationCodeByEmail,
+} from '../utils/email'
+import { updateUserPassword } from '@/app/lib/actions'
+import Confetti from 'react-dom-confetti'
 
-const SignUpPage = () => {
+const ForgetPasswordPage = () => {
   const router = useRouter()
   const { theme } = useTheme()
 
@@ -37,56 +41,12 @@ const SignUpPage = () => {
   } = useForm()
 
   const sendEmailCode = async () => {
-    const { errMsg, code } = await getEmailVerificationCode(email)
-    if (errMsg) {
-      return toast.error(errMsg, {
-        position: 'top-center',
-        autoClose: 2000,
-        theme,
-      })
-    }
+    const code = await getEmailVerificationCode(email, theme)
+    if (!code) return
 
-    let count = 59
-    setSendCodeButtonText(`${60}s`)
-    const timer = setInterval(() => {
-      if (count > 0) {
-        count--
-        setSendCodeButtonText(`${count}s`)
-      } else {
-        clearInterval(timer)
-        setSendCodeButtonText('Send code')
-      }
-    }, 1000)
+    setSendCodeButtonTextTimer(60, setSendCodeButtonText)
 
-    emailjs
-      .send(
-        process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID!,
-        process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID!,
-        {
-          to: email,
-          from: process.env.NEXT_PUBLIC_EMAILJS_FROM_EMAIL,
-          fromName: process.env.NEXT_PUBLIC_MY_NAME,
-          code,
-        },
-        process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY,
-      )
-      .then(
-        () => {
-          toast.success('Verification code sent successfully.', {
-            position: 'top-center',
-            autoClose: 3000,
-            theme,
-          })
-        },
-        (error: any) => {
-          console.log('sendEmailCode error:', error)
-          toast.error('Oh, something went wrong. Please try again.', {
-            position: 'top-center',
-            autoClose: 3000,
-            theme,
-          })
-        },
-      )
+    await sendVerificationCodeByEmail(email, code, theme)
   }
 
   const submit = async (data: any) => {
@@ -207,4 +167,4 @@ const SignUpPage = () => {
   )
 }
 
-export default SignUpPage
+export default ForgetPasswordPage

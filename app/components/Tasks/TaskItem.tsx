@@ -1,5 +1,6 @@
-import { deleteTask } from '@/app/lib/actions'
-import type { Task } from '@/app/tasks/page'
+import { useState } from 'react'
+import type { Task } from '@/app/types/task'
+import { useTheme } from '@/app/context/theme-context'
 import {
   Button,
   Modal,
@@ -8,11 +9,14 @@ import {
   ModalFooter,
   ModalHeader,
 } from '@nextui-org/react'
-import { useState } from 'react'
 import { MdEditNote, MdDeleteOutline } from 'react-icons/md'
 import EditTaskModal from '../Modals/EditTaskModal'
+import { deleteTask } from '@/app/lib/actions'
+import { toast } from 'react-toastify';
 
-export default function TaskItem({ task }: { task: Task }) {
+export default function TaskItem({ task }: { task: Task; }) {
+  const { theme } = useTheme()
+  
   const [taskInfo, setTaskInfo] = useState(task)
   const [showEditModal, setShowEditModal] = useState(false)
   const [showDeleteModal, setShowDeleteModal] = useState(false)
@@ -20,7 +24,14 @@ export default function TaskItem({ task }: { task: Task }) {
 
   const handleDelete = async () => {
     setDeletingTask(true)
-    await deleteTask(task._id)
+    const { errMsg } = await deleteTask(task._id)
+    if (errMsg) {
+      toast.error('Oh, something went wrong. Please try again.', {
+        position: 'top-center',
+        autoClose: 3000,
+        theme,
+      })
+    }
     setDeletingTask(false)
     setShowDeleteModal(false)
   }

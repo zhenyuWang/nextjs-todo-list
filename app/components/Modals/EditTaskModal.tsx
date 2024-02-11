@@ -1,6 +1,8 @@
 'use client'
 
 import { Dispatch, SetStateAction, useState } from 'react'
+import type { Task } from '@/app/types/task'
+import { useTheme } from '@/app/context/theme-context'
 import {
   Modal,
   ModalHeader,
@@ -16,8 +18,6 @@ import {
 } from '@nextui-org/react'
 import { toast } from 'react-toastify'
 import { updateTask } from '@/app/lib/actions'
-import { Task } from '@/app/tasks/page'
-import { useTheme } from '@/app/context/theme-context'
 
 export default function EditTaskModal({
   taskInfo,

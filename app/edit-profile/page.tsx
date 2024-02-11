@@ -1,21 +1,21 @@
 'use client'
 
 import { useState } from 'react'
+import { useRouter, useSearchParams } from 'next/navigation'
+import { useTheme } from '@/app/context/theme-context'
 import { useForm } from 'react-hook-form'
 import GitHubLink from '@/app/components/GitHubLink'
 import ThemeSwitch from '@/app/components/ThemeSwitch'
 import FormInput from '@/app/components/Form/FormInput'
 import { signUpFormValidationRules } from '@/app/utils/form'
-import Confetti from 'react-dom-confetti'
 import { Image, Button } from '@nextui-org/react'
 import Link from 'next/link'
 import { MdCloudUpload } from 'react-icons/md'
 import { toast } from 'react-toastify'
 import { updateUser } from '@/app/lib/actions'
-import { useTheme } from '@/app/context/theme-context'
-import { useRouter, useSearchParams } from 'next/navigation'
+import Confetti from 'react-dom-confetti'
 
-const SignUpPage = () => {
+const EditProfilePage = () => {
   const router = useRouter()
 
   const params = useSearchParams()
@@ -156,4 +156,4 @@ const SignUpPage = () => {
   )
 }
 
-export default SignUpPage
+export default EditProfilePage

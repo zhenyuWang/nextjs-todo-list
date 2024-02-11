@@ -1,6 +1,7 @@
 'use client'
 
 import { Dispatch, SetStateAction, useState } from 'react'
+import { useTheme } from '@/app/context/theme-context'
 import {
   Modal,
   ModalHeader,
@@ -16,7 +17,6 @@ import {
 } from '@nextui-org/react'
 import { toast } from 'react-toastify'
 import { createTask } from '@/app/lib/actions'
-import { useTheme } from '@/app/context/theme-context'
 
 export default function CreateTaskModal({
   showModal,

@@ -10,14 +10,14 @@ import bcrypt from 'bcrypt'
 import { auth, signIn, signOut, getLoginErrorMsg } from '@/auth'
 import { isBase64Img } from '../utils/tools'
 
-const EMAIL_VERIFICATION_CODE_EXPIRY = 60 * 1000 // 1 minute
+const EMAIL_VERIFICATION_CODE_EXPIRY = 60 * 1000
 const EMAIL_VERIFICATION_CODE_MAP = new Map()
 
 const generateVerificationCode = () => {
   return Math.round(100000 + Math.random() * 900000)
 }
 
-export const getEmailVerificationCode = (email: string) => {
+export const generateEmailVerificationCode = (email: string) => {
   if (EMAIL_VERIFICATION_CODE_MAP.has(email)) {
     const preCodeInfo = EMAIL_VERIFICATION_CODE_MAP.get(email)
     const now = Date.now()
@@ -107,7 +107,7 @@ export const deleteUser = async (id: string) => {
   } catch (err) {
     // TODO: optimize request failure interactions
     console.log(err)
-    throw new Error('Failed to delete user!')
+    return { errMsg: 'Failed to delete user!' }
   }
 
   revalidatePath('/dashboard/users')
@@ -135,9 +135,8 @@ export const updateUser = async (userInfo: any) => {
         fs.mkdirSync(dir, { recursive: true })
       }
       const { errMsg } = base64ToLocalImg(avatar, changedAvatarPath)
-      if (errMsg) {
-        throw new Error(errMsg)
-      }
+      if (errMsg) return { errMsg }
+
       isAvatarChanged = true
     }
 
@@ -250,7 +249,7 @@ export const fetchTask = async (id: string) => {
     return await Task.findById(id)
   } catch (err) {
     console.log(err)
-    throw new Error('Failed to fetch task!')
+    return { errMsg: 'Failed to fetch task!' }
   }
 }
 
@@ -286,10 +285,11 @@ export const deleteTask = async (id: string) => {
     connectToDB()
 
     await Task.findByIdAndDelete(id)
+    return {}
   } catch (err) {
     // TODO: optimize request failure interactions
     console.log(err)
-    throw new Error('Failed to delete task!')
+    return { errMsg: 'Failed to delete task!' }
   }
 
   revalidatePath('/tasks')

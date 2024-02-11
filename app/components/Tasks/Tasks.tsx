@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import type { Task } from '@/app/tasks/page'
+import type { Task } from '@/app/types/task'
 import GitHubLink from '@/app/components/GitHubLink'
 import ThemeSwitch from '@/app/components/ThemeSwitch'
 import AddTaskButton from './AddTaskButton'
