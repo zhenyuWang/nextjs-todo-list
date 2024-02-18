@@ -23,7 +23,7 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
           content='A todo list that base on Next.js, integrates eslint, code checking, commit-msg validation, and more.'
         />
       </head>
-      <body className='bg-gradient-to-r from-[#ecddfa] to-[#7ccdf5] dark:from-[#330066] dark:to-[#000]'>
+      <body className='bg-gradient-to-r from-[#ecddfa] to-[#7ccdf5] dark:from-[#330066] dark:to-[#000] overflow-hidden'>
         <ThemeContextProvider>
           {children}
           <ToastContainer />
