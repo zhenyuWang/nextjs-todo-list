@@ -39,7 +39,7 @@ export default function TaskItem({ task }: { task: Task }) {
   const getStatusText = (status: number) => {
     switch (status) {
       case 0:
-        return 'Incomplete'
+        return 'Pending'
       case 1:
         return 'Doing'
       case 2:

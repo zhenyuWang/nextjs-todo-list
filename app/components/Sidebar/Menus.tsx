@@ -27,18 +27,24 @@ export default function Menus({ closeSidebar }: { closeSidebar: () => void }) {
     },
     {
       id: 3,
+      title: 'Pending',
+      icon: MdCleaningServices,
+      link: '/tasks/pending',
+    },
+    {
+      id: 4,
       title: 'Doing',
       icon: MdCleaningServices,
       link: '/tasks/doing',
     },
     {
-      id: 4,
+      id: 5,
       title: 'Completed',
       icon: MdDone,
       link: '/tasks/completed',
     },
     {
-      id: 5,
+      id: 6,
       title: 'Deleted',
       icon: MdDelete,
       link: '/tasks/deleted',

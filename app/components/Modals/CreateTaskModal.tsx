@@ -35,7 +35,7 @@ export default function CreateTaskModal({
   const [isImportant, setIsImportant] = useState(false)
 
   const taskStatusList = [
-    { label: 'Incomplete', value: 0 },
+    { label: 'Pending', value: 0 },
     { label: 'Doing', value: 1 },
     { label: 'Completed', value: 2 },
     { label: 'Deleted', value: 3 },
