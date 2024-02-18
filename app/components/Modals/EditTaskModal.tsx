@@ -17,7 +17,6 @@ import {
   Checkbox,
 } from '@nextui-org/react'
 import { toast } from 'react-toastify'
-import { updateTask } from '@/app/lib/actions'
 
 export default function EditTaskModal({
   taskInfo,
@@ -60,9 +59,7 @@ export default function EditTaskModal({
         theme,
       })
     }
-    const res = await updateTask({
-      id: taskInfo._id,
-      userId: taskInfo.userId,
+    await updateTaskInfo({
       title,
       description,
       deadline,
@@ -70,14 +67,6 @@ export default function EditTaskModal({
       isImportant,
     })
     setSubmitting(false)
-    if (res?.errMsg) {
-      return toast.error(res.errMsg, {
-        position: 'top-center',
-        autoClose: 2000,
-        theme,
-      })
-    }
-    updateTaskInfo({ title, description, deadline, status, isImportant })
     setShowModal(false)
   }
 

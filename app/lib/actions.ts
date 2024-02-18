@@ -292,11 +292,9 @@ export const deleteTask = async (id: string) => {
 }
 
 export const updateTask = async (taskInfo: any) => {
-  const { id, title, description, deadline, status, isImportant } = taskInfo
-
   try {
     connectToDB()
-
+    const { _id, title, description, deadline, status, isImportant } = taskInfo
     const updateFields = {
       title,
       description,
@@ -305,8 +303,9 @@ export const updateTask = async (taskInfo: any) => {
       isImportant,
     }
 
-    await Task.findByIdAndUpdate(id, updateFields)
+    await Task.findByIdAndUpdate(_id, updateFields)
     revalidatePath('/tasks')
+    return {}
   } catch (err) {
     console.log(err)
     return { errMsg: 'Failed to update task!' }

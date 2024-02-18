@@ -11,22 +11,24 @@ import {
 } from '@nextui-org/react'
 import { MdEditNote, MdDeleteOutline } from 'react-icons/md'
 import EditTaskModal from '../Modals/EditTaskModal'
-import { deleteTask } from '@/app/lib/actions'
+import { updateTask, deleteTask } from '@/app/lib/actions'
 import { toast } from 'react-toastify'
 
 export default function TaskItem({ task }: { task: Task }) {
   const { theme } = useTheme()
 
-  const [taskInfo, setTaskInfo] = useState(task)
   const [showEditModal, setShowEditModal] = useState(false)
   const [showDeleteModal, setShowDeleteModal] = useState(false)
   const [deletingTask, setDeletingTask] = useState(false)
 
   const handleDelete = async () => {
     setDeletingTask(true)
-    const { errMsg } = await deleteTask(task._id)
+    const { errMsg } =
+      task.status === 3
+        ? await deleteTask(task._id)
+        : await updateTask({ ...task, status: 3 })
     if (errMsg) {
-      toast.error('Oh, something went wrong. Please try again.', {
+      toast.error(errMsg, {
         position: 'top-center',
         autoClose: 3000,
         theme,
@@ -61,8 +63,15 @@ export default function TaskItem({ task }: { task: Task }) {
     }
   }
 
-  const updateTaskInfo = (task: any) => {
-    setTaskInfo((prev) => ({ ...prev, ...task }))
+  const updateTaskInfo = async (taskInfo: any) => {
+    const { errMsg } = await updateTask({ _id: task._id, ...taskInfo })
+    if (errMsg) {
+      toast.error(errMsg, {
+        position: 'top-center',
+        autoClose: 3000,
+        theme,
+      })
+    }
   }
 
   return (
@@ -72,27 +81,27 @@ export default function TaskItem({ task }: { task: Task }) {
     >
       <h3
         className={`text-xl ${
-          taskInfo.isImportant ? 'text-red-500 font-bold' : ''
+          task.isImportant ? 'text-red-500 font-bold' : ''
         }`}
       >
-        {taskInfo.title}
+        {task.title}
       </h3>
       <p className='h-[85px] pt-3 flex-1 break-words line-clamp-3'>
-        {taskInfo.description}
+        {task.description}
       </p>
       <div className='pt-3 text-sm text-slate-700 dark:text-gray-300'>
-        <div>createdAt: {taskInfo.createdAt}</div>
-        {taskInfo.deadline ? (
-          <div className='pt-2'>deadline: {taskInfo.deadline}</div>
+        <div>createdAt: {task.createdAt}</div>
+        {task.deadline ? (
+          <div className='pt-2'>deadline: {task.deadline}</div>
         ) : null}
       </div>
       <div className='pt-3 flex justify-between'>
         <span
           className={`py-1 w-24 text-center rounded-xl text-sm ${getStatusColor(
-            taskInfo.status,
+            task.status,
           )}`}
         >
-          {getStatusText(taskInfo.status)}
+          {getStatusText(task.status)}
         </span>
         <div className='flex'>
           <MdEditNote
@@ -112,7 +121,7 @@ export default function TaskItem({ task }: { task: Task }) {
         </div>
       </div>
       <EditTaskModal
-        taskInfo={taskInfo}
+        taskInfo={task}
         showModal={showEditModal}
         setShowModal={setShowEditModal}
         updateTaskInfo={updateTaskInfo}
