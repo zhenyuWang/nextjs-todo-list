@@ -56,7 +56,7 @@ export default function UserInfo() {
         className='w-14 sm:w-20 h-14 sm:h-20'
         radius='full'
         isZoomed={true}
-        src={user.avatar || 'no-avatar.png'}
+        src={user.avatar || '/no-avatar.png'}
         alt='avatar'
       />
       <FaUserEdit
