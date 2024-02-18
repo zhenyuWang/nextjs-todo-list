@@ -72,13 +72,12 @@ export const createUser = async (userInfo: any) => {
 
     await newUser.save()
     await authenticate({ email, password })
+    revalidatePath('/tasks')
+    redirect('/tasks')
   } catch (err) {
     console.log('createUser error:', err)
     return { errMsg: 'Failed to create user!' }
   }
-
-  revalidatePath('/tasks')
-  redirect('/tasks')
 }
 
 export const deleteUser = async (id: string) => {
@@ -104,13 +103,12 @@ export const deleteUser = async (id: string) => {
         console.log('File does not exist.')
       }
     })
+    revalidatePath('/dashboard/users')
   } catch (err) {
     // TODO: optimize request failure interactions
     console.log(err)
     return { errMsg: 'Failed to delete user!' }
   }
-
-  revalidatePath('/dashboard/users')
 }
 
 export const updateUser = async (userInfo: any) => {
@@ -271,13 +269,12 @@ export const createTask = async (taskInfo: any) => {
       isImportant,
     })
     await newTask.save()
+    revalidatePath('/tasks')
   } catch (err) {
     // TODO: optimize request failure interactions
     console.log(err)
     return { errMsg: 'Failed to create task!' }
   }
-
-  revalidatePath('/tasks')
 }
 
 export const deleteTask = async (id: string) => {
@@ -285,14 +282,13 @@ export const deleteTask = async (id: string) => {
     connectToDB()
 
     await Task.findByIdAndDelete(id)
+    revalidatePath('/tasks')
     return {}
   } catch (err) {
     // TODO: optimize request failure interactions
     console.log(err)
     return { errMsg: 'Failed to delete task!' }
   }
-
-  revalidatePath('/tasks')
 }
 
 export const updateTask = async (taskInfo: any) => {
@@ -310,6 +306,7 @@ export const updateTask = async (taskInfo: any) => {
     }
 
     await Task.findByIdAndUpdate(id, updateFields)
+    revalidatePath('/tasks')
   } catch (err) {
     console.log(err)
     return { errMsg: 'Failed to update task!' }

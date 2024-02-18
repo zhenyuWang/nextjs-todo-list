@@ -12,11 +12,11 @@ import {
 import { MdEditNote, MdDeleteOutline } from 'react-icons/md'
 import EditTaskModal from '../Modals/EditTaskModal'
 import { deleteTask } from '@/app/lib/actions'
-import { toast } from 'react-toastify';
+import { toast } from 'react-toastify'
 
-export default function TaskItem({ task }: { task: Task; }) {
+export default function TaskItem({ task }: { task: Task }) {
   const { theme } = useTheme()
-  
+
   const [taskInfo, setTaskInfo] = useState(task)
   const [showEditModal, setShowEditModal] = useState(false)
   const [showDeleteModal, setShowDeleteModal] = useState(false)
